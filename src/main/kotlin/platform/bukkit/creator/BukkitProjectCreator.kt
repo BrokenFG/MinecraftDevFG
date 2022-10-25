@@ -44,7 +44,20 @@ sealed class BukkitProjectCreator<T : BuildSystem>(
 
     protected fun setupMainClassStep(): BasicJavaClassStep {
         return createJavaClassStep(config.mainClass) { packageName, className ->
-            BukkitTemplate.applyMainClass(project, packageName, className)
+            BukkitTemplate.applyMainClass(project, packageName, className, buildSystem.artifactId)
+        }
+    }
+
+    protected fun setupLangClassStep(): BasicJavaClassStep {
+        val (_, mainClassName) = splitPackage(config.mainClass)
+        return createJavaClassStep(config.langClass) { packageName, className ->
+            BukkitTemplate.applyLangClass(project, packageName, className, config.mainClass, mainClassName)
+        }
+    }
+
+    protected fun setupSettingsClassStep(): BasicJavaClassStep {
+        return createJavaClassStep(config.settingsClass) { packageName, className ->
+            BukkitTemplate.applySettingsClass(project, packageName, className)
         }
     }
 
@@ -55,6 +68,14 @@ sealed class BukkitProjectCreator<T : BuildSystem>(
 
     protected fun setupYmlStep(): PluginYmlStep {
         return PluginYmlStep(project, buildSystem, config)
+    }
+
+    protected fun setupLangStep(): LangYmlStep {
+        return LangYmlStep(project, buildSystem)
+    }
+
+    protected fun setupConfigStep(): ConfigYmlStep {
+        return ConfigYmlStep(project, buildSystem)
     }
 }
 
@@ -71,7 +92,11 @@ class BukkitMavenCreator(
             setupDependencyStep(),
             BasicMavenStep(project, rootDirectory, buildSystem, config, pomText),
             setupMainClassStep(),
+            setupLangClassStep(),
+            setupSettingsClassStep(),
             setupYmlStep(),
+            setupLangStep(),
+            setupConfigStep(),
             MavenGitignoreStep(project, rootDirectory),
             BasicMavenFinalizerStep(rootModule, rootDirectory)
         )
@@ -96,7 +121,11 @@ class BukkitGradleCreator(
             CreateDirectoriesStep(buildSystem, rootDirectory),
             GradleSetupStep(project, rootDirectory, buildSystem, files),
             setupMainClassStep(),
+            setupLangClassStep(),
+            setupSettingsClassStep(),
             setupYmlStep(),
+            setupLangStep(),
+            setupConfigStep(),
             GradleWrapperStep(project, rootDirectory, buildSystem),
             GradleGitignoreStep(project, rootDirectory),
             BasicGradleFinalizerStep(rootModule, rootDirectory, buildSystem)
@@ -184,5 +213,25 @@ class PluginYmlStep(
     override fun runStep(indicator: ProgressIndicator) {
         val text = BukkitTemplate.applyPluginYml(project, config, buildSystem)
         CreatorStep.writeTextToFile(project, buildSystem.dirsOrError.resourceDirectory, "plugin.yml", text)
+    }
+}
+
+class LangYmlStep(
+    private val project: Project,
+    private val buildSystem: BuildSystem
+) : CreatorStep {
+    override fun runStep(indicator: ProgressIndicator) {
+        val text = BukkitTemplate.applyLangYml(project)
+        CreatorStep.writeTextToFile(project, buildSystem.dirsOrError.resourceDirectory, "lang.yml", text)
+    }
+}
+
+class ConfigYmlStep(
+    private val project: Project,
+    private val buildSystem: BuildSystem
+) : CreatorStep {
+    override fun runStep(indicator: ProgressIndicator) {
+        val text = BukkitTemplate.applyConfigYml(project)
+        CreatorStep.writeTextToFile(project, buildSystem.dirsOrError.resourceDirectory, "config.yml", text)
     }
 }

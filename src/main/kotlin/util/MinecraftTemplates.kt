@@ -24,7 +24,11 @@ class MinecraftTemplates : FileTemplateGroupDescriptorFactory {
         FileTemplateGroupDescriptor("Bukkit", PlatformAssets.BUKKIT_ICON).let { bukkitGroup ->
             group.addTemplate(bukkitGroup)
             bukkitGroup.addTemplate(FileTemplateDescriptor(BUKKIT_MAIN_CLASS_TEMPLATE))
+            bukkitGroup.addTemplate(FileTemplateDescriptor(BUKKIT_LANG_CLASS_TEMPLATE))
+            bukkitGroup.addTemplate(FileTemplateDescriptor(BUKKIT_SETTINGS_CLASS_TEMPLATE))
             bukkitGroup.addTemplate(FileTemplateDescriptor(BUKKIT_PLUGIN_YML_TEMPLATE))
+            bukkitGroup.addTemplate(FileTemplateDescriptor(BUKKIT_LANG_YML_TEMPLATE))
+            bukkitGroup.addTemplate(FileTemplateDescriptor(BUKKIT_CONFIG_YML_TEMPLATE))
             bukkitGroup.addTemplate(FileTemplateDescriptor(BUKKIT_BUILD_GRADLE_TEMPLATE))
             bukkitGroup.addTemplate(FileTemplateDescriptor(BUKKIT_SUBMODULE_BUILD_GRADLE_TEMPLATE))
             bukkitGroup.addTemplate(FileTemplateDescriptor(BUKKIT_GRADLE_PROPERTIES_TEMPLATE))
@@ -186,7 +190,11 @@ class MinecraftTemplates : FileTemplateGroupDescriptorFactory {
 
     companion object {
         const val BUKKIT_MAIN_CLASS_TEMPLATE = "Bukkit Main Class.java"
+        const val BUKKIT_LANG_CLASS_TEMPLATE = "Bukkit Lang Class.java"
+        const val BUKKIT_SETTINGS_CLASS_TEMPLATE = "Bukkit Settings Class.java"
         const val BUKKIT_PLUGIN_YML_TEMPLATE = "Bukkit plugin.yml"
+        const val BUKKIT_CONFIG_YML_TEMPLATE = "Bukkit config.yml"
+        const val BUKKIT_LANG_YML_TEMPLATE = "Bukkit lang.yml"
         const val BUKKIT_BUILD_GRADLE_TEMPLATE = "Bukkit build.gradle"
         const val BUKKIT_SUBMODULE_BUILD_GRADLE_TEMPLATE = "Bukkit Submodule build.gradle"
         const val BUKKIT_GRADLE_PROPERTIES_TEMPLATE = "Bukkit gradle.properties"
@@ -195,6 +203,8 @@ class MinecraftTemplates : FileTemplateGroupDescriptorFactory {
         const val BUKKIT_SUBMODULE_POM_TEMPLATE = "Bukkit Submodule pom.xml"
 
         const val BUNGEECORD_MAIN_CLASS_TEMPLATE = "BungeeCord Main Class.java"
+        const val BUNGEECORD_LANG_CLASS_TEMPLATE = "BungeeCord Lang Class.java"
+        const val BUNGEECORD_SETTINGS_CLASS_TEMPLATE = "BungeeCord Settings Class.java"
         const val BUNGEECORD_PLUGIN_YML_TEMPLATE = "BungeeCord bungee.yml"
         const val BUNGEECORD_BUILD_GRADLE_TEMPLATE = "BungeeCord build.gradle"
         const val BUNGEECORD_SUBMODULE_BUILD_GRADLE_TEMPLATE = "BungeeCord Submodule build.gradle"

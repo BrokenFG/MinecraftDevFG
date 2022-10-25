@@ -1,0 +1,16 @@
+package ${PACKAGE}.config;
+
+import org.bukkit.plugin.java.JavaPlugin;
+import ru.brfg.api.bukkit.config.DefaultSettings;
+
+public class ${CLASS_NAME} extends DefaultSettings {
+
+    public static void load(JavaPlugin plugin, String fileName) {
+        DefaultSettings.load(plugin, fileName);
+        load();
+    }
+
+    private static void load() {
+
+    }
+}

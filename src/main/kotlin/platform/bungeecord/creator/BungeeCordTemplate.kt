@@ -14,6 +14,8 @@ import com.demonwav.mcdev.creator.buildsystem.BuildSystem
 import com.demonwav.mcdev.creator.buildsystem.maven.BasicMavenStep
 import com.demonwav.mcdev.platform.BaseTemplate
 import com.demonwav.mcdev.platform.bukkit.creator.BukkitTemplate
+import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_CONFIG_YML_TEMPLATE
+import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_LANG_YML_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_PLUGIN_YML_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUNGEECORD_BUILD_GRADLE_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUNGEECORD_GRADLE_PROPERTIES_TEMPLATE
@@ -94,5 +96,17 @@ object BungeeCordTemplate : BaseTemplate() {
         }
 
         return project.applyTemplate(BUKKIT_PLUGIN_YML_TEMPLATE, props)
+    }
+
+    fun applyLangYml(
+        project: Project
+    ): String {
+        return project.applyTemplate(BUKKIT_LANG_YML_TEMPLATE)
+    }
+
+    fun applyConfigYml(
+        project: Project
+    ): String {
+        return project.applyTemplate(BUKKIT_CONFIG_YML_TEMPLATE)
     }
 }

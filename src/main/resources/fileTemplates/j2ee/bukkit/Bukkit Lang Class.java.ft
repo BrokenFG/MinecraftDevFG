@@ -1,0 +1,75 @@
+package ${PACKAGE}.config;
+
+import ru.brfg.api.bukkit.utils.Common;
+import ru.brfg.api.bukkit.config.Config;
+import ${MAIN};
+
+public enum ${CLASS_NAME} {
+
+    PREFIX("&c[${MAIN_NAME}] &f");
+
+    private String defaultValue;
+    private static Config config;
+
+    private Lang(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    public String getDefaultValue() {
+        return this.defaultValue;
+    }
+
+    public String getPath() {
+        return this.name().replace("_", ".");
+    }
+
+    public String toString() {
+        return this.toString(false);
+    }
+
+    public String toString(boolean remove) {
+        if (remove) {
+            return this.removeColors(config.getString(this.getPath()));
+        }
+        return this.fixColors(config.getString(this.getPath()));
+    }
+
+    public String toMsg() {
+        return this.toMsg(false);
+    }
+
+    public String toMsg(boolean remove) {
+        if (remove) {
+            return this.removeColors(config.getString(PREFIX.getPath())) + this.removeColors(config.getString(this.getPath()));
+        }
+        return this.fixColors(config.getString(PREFIX.getPath())) + this.fixColors(config.getString(this.getPath()));
+    }
+
+    private String removeColors(String string) {
+        if (string == null) {
+            return "";
+        }
+        return Common.stripColors(string);
+    }
+
+    private String fixColors(String s) {
+        if (s == null) {
+            return "";
+        }
+        return Common.colorize(s);
+    }
+
+    public static void setConfig(Config config) {
+        Lang.config = config;
+        Lang.load();
+    }
+
+    private static void load() {
+        for (Lang lang : Lang.values()) {
+            if (config.getString(lang.getPath()) == null || config.getString(lang.getPath()).isEmpty()) {
+                config.set(lang.getPath(), lang.getDefaultValue());
+            }
+        }
+        config.save();
+    }
+}
