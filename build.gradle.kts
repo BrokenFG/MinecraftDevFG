@@ -41,7 +41,7 @@ version = "$ideaVersionName-$coreVersion"
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 kotlin {
@@ -110,13 +110,14 @@ dependencies {
     testLibs(projects.mixinTestData)
 
     // For non-SNAPSHOT versions (unless Jetbrains fixes this...) find the version with:
-    // afterEvaluate { println(intellij.ideaDependency.buildNumber.substring(intellij.type.length + 1)) }
+    // afterEvaluate { println(intellij.ideaDependency.get().buildNumber.substring(intellij.type.get().length + 1)) }
     gradleToolingExtension(libs.groovy)
     gradleToolingExtension(libs.gradleToolingExtension)
     gradleToolingExtension(libs.annotations)
 
     testImplementation(libs.junit.api)
     testRuntimeOnly(libs.junit.entine)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 val artifactType = Attribute.of("artifactType", String::class.java)
@@ -185,22 +186,17 @@ tasks.runPluginVerifier {
     ideVersions.addAll("IC-$ideaVersionName")
 }
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
-    }
-}
-
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.compilerArgs = listOf("-proc:none")
-    options.release.set(11)
+    options.release.set(17)
 }
 
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
-        freeCompilerArgs = listOf("-Xuse-k2", "-Xjvm-default=all", "-Xjdk-release=11")
+        jvmTarget = JavaVersion.VERSION_17.toString()
+        // K2 causes the following error: https://youtrack.jetbrains.com/issue/KT-52786
+        freeCompilerArgs = listOf(/*"-Xuse-k2", */"-Xjvm-default=all", "-Xjdk-release=17")
         kotlinDaemonJvmArguments.add("-Xmx2G")
     }
 }
@@ -209,11 +205,9 @@ tasks.withType<KotlinCompile>().configureEach {
 // This is for maximum compatibility, these classes will be loaded into every Gradle import on all
 // projects (not just Minecraft), so we don't want to break that with an incompatible class version.
 tasks.named(gradleToolingExtensionSourceSet.compileJavaTaskName, JavaCompile::class) {
-    val java7Compiler = javaToolchains.compilerFor { languageVersion.set(JavaLanguageVersion.of(8)) }
+    val java7Compiler = javaToolchains.compilerFor { languageVersion.set(JavaLanguageVersion.of(11)) }
     javaCompiler.set(java7Compiler)
-    options.release.set(null as Int?)
-    sourceCompatibility = "1.5"
-    targetCompatibility = "1.5"
+    options.release.set(6)
     options.bootstrapClasspath = files(java7Compiler.map { it.metadata.installationPath.file("jre/lib/rt.jar") })
     options.compilerArgs = listOf("-Xlint:-options")
 }
@@ -251,6 +245,8 @@ tasks.test {
     systemProperty("NO_FS_ROOTS_ACCESS_CHECK", "true")
 
     jvmArgs(
+        "-Dsun.io.useCanonCaches=false",
+        "-Dsun.io.useCanonPrefixCache=false",
         "--add-opens", "java.base/java.io=ALL-UNNAMED",
         "--add-opens", "java.base/java.lang.invoke=ALL-UNNAMED",
         "--add-opens", "java.base/java.lang.ref=ALL-UNNAMED",
