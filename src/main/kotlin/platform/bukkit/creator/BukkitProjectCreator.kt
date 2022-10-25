@@ -44,7 +44,7 @@ sealed class BukkitProjectCreator<T : BuildSystem>(
 
     protected fun setupMainClassStep(): BasicJavaClassStep {
         return createJavaClassStep(config.mainClass) { packageName, className ->
-            BukkitTemplate.applyMainClass(project, packageName, className, buildSystem.artifactId)
+            BukkitTemplate.applyMainClass(project, packageName, className, config.langClass, config.settingsClass)
         }
     }
 

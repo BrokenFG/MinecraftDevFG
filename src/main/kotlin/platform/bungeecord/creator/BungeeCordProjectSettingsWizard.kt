@@ -109,6 +109,8 @@ class BungeeCordProjectSettingsWizard(
 
         conf.pluginName = this.pluginNameField.text
         conf.mainClass = this.mainClassField.text
+        conf.langClass = this.mainClassField.text.replace(conf.pluginName, "config.Lang")
+        conf.settingsClass = this.mainClassField.text.replace(conf.pluginName, "config.Settings")
         conf.description = this.descriptionField.text
         conf.minecraftVersion = this.minecraftVersionBox.selectedItem as String
 

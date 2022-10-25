@@ -19,8 +19,10 @@ import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_LANG_YML_TEMP
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_PLUGIN_YML_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUNGEECORD_BUILD_GRADLE_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUNGEECORD_GRADLE_PROPERTIES_TEMPLATE
+import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUNGEECORD_LANG_CLASS_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUNGEECORD_MAIN_CLASS_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUNGEECORD_POM_TEMPLATE
+import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUNGEECORD_SETTINGS_CLASS_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUNGEECORD_SETTINGS_GRADLE_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUNGEECORD_SUBMODULE_BUILD_GRADLE_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUNGEECORD_SUBMODULE_POM_TEMPLATE
@@ -31,6 +33,40 @@ object BungeeCordTemplate : BaseTemplate() {
     fun applyMainClass(
         project: Project,
         packageName: String,
+        className: String,
+        langClass: String,
+        settingsClass: String
+    ): String {
+        val props = mapOf(
+            "PACKAGE" to packageName,
+            "CLASS_NAME" to className,
+            "LANG_CLASS" to langClass,
+            "SETTINGS_CLASS" to settingsClass
+        )
+
+        return project.applyTemplate(BUNGEECORD_MAIN_CLASS_TEMPLATE, props)
+    }
+
+    fun applyLangClass(
+        project: Project,
+        packageName: String,
+        className: String,
+        mainClass: String,
+        mainClassName: String
+    ): String {
+        val props = mapOf(
+            "PACKAGE" to packageName,
+            "CLASS_NAME" to className,
+            "MAIN" to mainClass,
+            "MAIN_NAME" to mainClassName
+        )
+
+        return project.applyTemplate(BUNGEECORD_LANG_CLASS_TEMPLATE, props)
+    }
+
+    fun applySettingsClass(
+        project: Project,
+        packageName: String,
         className: String
     ): String {
         val props = mapOf(
@@ -38,7 +74,7 @@ object BungeeCordTemplate : BaseTemplate() {
             "CLASS_NAME" to className
         )
 
-        return project.applyTemplate(BUNGEECORD_MAIN_CLASS_TEMPLATE, props)
+        return project.applyTemplate(BUNGEECORD_SETTINGS_CLASS_TEMPLATE, props)
     }
 
     fun applyPom(project: Project): String {

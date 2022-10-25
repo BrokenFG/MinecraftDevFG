@@ -3,8 +3,8 @@ package ${PACKAGE};
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.brfg.api.bukkit.config.Config;
-import ru.brfg.${ARTIFACT_ID}.config.Lang;
-import ru.brfg.${ARTIFACT_ID}.config.Settings;
+import ${LANG_CLASS};
+import ${SETTINGS_CLASS};
 
 public final class ${CLASS_NAME} extends JavaPlugin {
 
@@ -15,7 +15,7 @@ public final class ${CLASS_NAME} extends JavaPlugin {
     public void onEnable() {
         instance = this;
         Settings.load(this, "config.yml");
-        Lang.setConfig(new Config(this, "lang.yml"));
+        Lang.setConfig(new Config(this, "lang.yml", "lang.yml"));
     }
 
     @Override

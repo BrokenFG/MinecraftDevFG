@@ -43,7 +43,20 @@ sealed class BungeeCordProjectCreator<T : BuildSystem>(
 
     protected fun setupMainClassStep(): BasicJavaClassStep {
         return createJavaClassStep(config.mainClass) { packageName, className ->
-            BungeeCordTemplate.applyMainClass(project, packageName, className)
+            BungeeCordTemplate.applyMainClass(project, packageName, className, config.langClass, config.settingsClass)
+        }
+    }
+
+    protected fun setupLangClassStep(): BasicJavaClassStep {
+        val (_, mainClassName) = splitPackage(config.mainClass)
+        return createJavaClassStep(config.langClass) { packageName, className ->
+            BungeeCordTemplate.applyLangClass(project, packageName, className, config.mainClass, mainClassName)
+        }
+    }
+
+    protected fun setupSettingsClassStep(): BasicJavaClassStep {
+        return createJavaClassStep(config.settingsClass) { packageName, className ->
+            BungeeCordTemplate.applySettingsClass(project, packageName, className)
         }
     }
 
@@ -78,6 +91,8 @@ class BungeeCordMavenCreator(
             setupDependencyStep(),
             BasicMavenStep(project, rootDirectory, buildSystem, config, pomText),
             setupMainClassStep(),
+            setupLangClassStep(),
+            setupSettingsClassStep(),
             setupYmlStep(),
             setupLangStep(),
             setupConfigStep(),
@@ -105,6 +120,8 @@ class BungeeCordGradleCreator(
             CreateDirectoriesStep(buildSystem, rootDirectory),
             GradleSetupStep(project, rootDirectory, buildSystem, files),
             setupMainClassStep(),
+            setupLangClassStep(),
+            setupSettingsClassStep(),
             setupYmlStep(),
             setupLangStep(),
             setupConfigStep(),

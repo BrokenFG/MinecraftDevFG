@@ -38,12 +38,14 @@ object BukkitTemplate : BaseTemplate() {
         project: Project,
         packageName: String,
         className: String,
-        artifactId: String
+        langClass: String,
+        settingsClass: String
     ): String {
         val props = mapOf(
             "PACKAGE" to packageName,
             "CLASS_NAME" to className,
-            "ARTIFACT_ID" to artifactId
+            "LANG_CLASS" to langClass,
+            "SETTINGS_CLASS" to settingsClass
         )
 
         return project.applyTemplate(BUKKIT_MAIN_CLASS_TEMPLATE, props)

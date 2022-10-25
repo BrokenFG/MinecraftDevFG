@@ -1,4 +1,4 @@
-package ${PACKAGE}.config;
+package ${PACKAGE};
 
 import ru.brfg.api.bukkit.utils.Common;
 import ru.brfg.api.bukkit.config.Config;

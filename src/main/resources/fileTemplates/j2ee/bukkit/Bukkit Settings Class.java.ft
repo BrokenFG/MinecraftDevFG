@@ -1,4 +1,4 @@
-package ${PACKAGE}.config;
+package ${PACKAGE};
 
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.brfg.api.bukkit.config.DefaultSettings;

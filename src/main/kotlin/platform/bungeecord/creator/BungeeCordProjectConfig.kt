@@ -30,6 +30,8 @@ class BungeeCordProjectConfig(override var type: PlatformType) :
     ProjectConfig(), MavenCreator, GradleCreator, BukkitLikeConfiguration {
 
     override lateinit var mainClass: String
+    lateinit var langClass: String
+    lateinit var settingsClass: String
 
     var minecraftVersion = ""
     val semanticMinecraftVersion: SemanticVersion

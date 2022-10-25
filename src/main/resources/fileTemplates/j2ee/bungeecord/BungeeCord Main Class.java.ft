@@ -3,8 +3,8 @@ package ${PACKAGE};
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
 import ru.brfg.api.bungee.config.Config;
-import ru.brfg.${ARTIFACT_ID}.config.Lang;
-import ru.brfg.${ARTIFACT_ID}.config.Settings;
+import ${LANG_CLASS};
+import ${SETTINGS_CLASS};
 
 public final class ${CLASS_NAME} extends Plugin {
 
