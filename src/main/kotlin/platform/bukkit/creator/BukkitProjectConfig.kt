@@ -31,6 +31,8 @@ class BukkitProjectConfig(override var type: PlatformType) :
     ProjectConfig(), BukkitLikeConfiguration, MavenCreator, GradleCreator {
 
     override lateinit var mainClass: String
+    lateinit var langClass: String
+    lateinit var settingsClass: String
 
     var loadOrder: LoadOrder = LoadOrder.POSTWORLD
     var minecraftVersion: String = ""

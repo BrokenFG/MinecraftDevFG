@@ -55,6 +55,14 @@ sealed class BungeeCordProjectCreator<T : BuildSystem>(
     protected fun setupYmlStep(): BungeeYmlStep {
         return BungeeYmlStep(project, buildSystem, config)
     }
+
+    protected fun setupLangStep(): LangYmlStep {
+        return LangYmlStep(project, buildSystem)
+    }
+
+    protected fun setupConfigStep(): ConfigYmlStep {
+        return ConfigYmlStep(project, buildSystem)
+    }
 }
 
 class BungeeCordMavenCreator(
@@ -71,6 +79,8 @@ class BungeeCordMavenCreator(
             BasicMavenStep(project, rootDirectory, buildSystem, config, pomText),
             setupMainClassStep(),
             setupYmlStep(),
+            setupLangStep(),
+            setupConfigStep(),
             MavenGitignoreStep(project, rootDirectory),
             BasicMavenFinalizerStep(rootModule, rootDirectory)
         )
@@ -96,6 +106,8 @@ class BungeeCordGradleCreator(
             GradleSetupStep(project, rootDirectory, buildSystem, files),
             setupMainClassStep(),
             setupYmlStep(),
+            setupLangStep(),
+            setupConfigStep(),
             GradleWrapperStep(project, rootDirectory, buildSystem),
             GradleGitignoreStep(project, rootDirectory),
             BasicGradleFinalizerStep(rootModule, rootDirectory, buildSystem)
@@ -153,5 +165,25 @@ class BungeeYmlStep(
     override fun runStep(indicator: ProgressIndicator) {
         val text = BungeeCordTemplate.applyBungeeYml(project, config, buildSystem)
         CreatorStep.writeTextToFile(project, buildSystem.dirsOrError.resourceDirectory, "bungee.yml", text)
+    }
+}
+
+class LangYmlStep(
+    private val project: Project,
+    private val buildSystem: BuildSystem
+) : CreatorStep {
+    override fun runStep(indicator: ProgressIndicator) {
+        val text = BungeeCordTemplate.applyLangYml(project)
+        CreatorStep.writeTextToFile(project, buildSystem.dirsOrError.resourceDirectory, "lang.yml", text)
+    }
+}
+
+class ConfigYmlStep(
+    private val project: Project,
+    private val buildSystem: BuildSystem
+) : CreatorStep {
+    override fun runStep(indicator: ProgressIndicator) {
+        val text = BungeeCordTemplate.applyConfigYml(project)
+        CreatorStep.writeTextToFile(project, buildSystem.dirsOrError.resourceDirectory, "config.yml", text)
     }
 }

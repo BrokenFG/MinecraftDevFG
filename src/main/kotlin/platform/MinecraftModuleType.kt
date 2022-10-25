@@ -27,7 +27,7 @@ class MinecraftModuleType : JavaModuleType() {
 
     companion object {
         private const val ID = "MINECRAFT_MODULE_TYPE"
-        const val NAME = "Minecraft"
+        const val NAME = "MinecraftFG"
 
         val instance: MinecraftModuleType
             get() = ModuleTypeManager.getInstance().findByID(ID) as MinecraftModuleType

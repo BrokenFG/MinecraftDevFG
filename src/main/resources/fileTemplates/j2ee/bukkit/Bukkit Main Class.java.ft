@@ -1,13 +1,21 @@
 package ${PACKAGE};
 
+import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
+import ru.brfg.api.bukkit.config.Config;
+import ru.brfg.${ARTIFACT_ID}.config.Lang;
+import ru.brfg.${ARTIFACT_ID}.config.Settings;
 
 public final class ${CLASS_NAME} extends JavaPlugin {
 
+    @Getter
+    private static ${CLASS_NAME} instance;
+
     @Override
     public void onEnable() {
-        // Plugin startup logic
-
+        instance = this;
+        Settings.load(this, "config.yml");
+        Lang.setConfig(new Config(this, "lang.yml"));
     }
 
     @Override

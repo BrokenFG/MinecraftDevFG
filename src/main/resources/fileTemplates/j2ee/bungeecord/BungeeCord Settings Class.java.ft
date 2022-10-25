@@ -1,0 +1,16 @@
+package ${PACKAGE}.config;
+
+import net.md_5.bungee.api.plugin.Plugin;
+import ru.brfg.api.bungee.config.DefaultSettings;
+
+public class ${CLASS_NAME} extends DefaultSettings {
+
+    public static void load(Plugin plugin, String fileName) {
+        DefaultSettings.load(plugin, fileName);
+        load();
+    }
+
+    private static void load() {
+
+    }
+}

@@ -19,10 +19,14 @@ import com.demonwav.mcdev.platform.bukkit.BukkitLikeConfiguration
 import com.demonwav.mcdev.platform.bukkit.BukkitModuleType
 import com.demonwav.mcdev.platform.bukkit.data.LoadOrder
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_BUILD_GRADLE_TEMPLATE
+import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_CONFIG_YML_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_GRADLE_PROPERTIES_TEMPLATE
+import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_LANG_CLASS_TEMPLATE
+import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_LANG_YML_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_MAIN_CLASS_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_PLUGIN_YML_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_POM_TEMPLATE
+import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_SETTINGS_CLASS_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_SETTINGS_GRADLE_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_SUBMODULE_BUILD_GRADLE_TEMPLATE
 import com.demonwav.mcdev.util.MinecraftTemplates.Companion.BUKKIT_SUBMODULE_POM_TEMPLATE
@@ -33,6 +37,38 @@ object BukkitTemplate : BaseTemplate() {
     fun applyMainClass(
         project: Project,
         packageName: String,
+        className: String,
+        artifactId: String
+    ): String {
+        val props = mapOf(
+            "PACKAGE" to packageName,
+            "CLASS_NAME" to className,
+            "ARTIFACT_ID" to artifactId
+        )
+
+        return project.applyTemplate(BUKKIT_MAIN_CLASS_TEMPLATE, props)
+    }
+
+    fun applyLangClass(
+        project: Project,
+        packageName: String,
+        className: String,
+        mainClass: String,
+        mainClassName: String
+    ): String {
+        val props = mapOf(
+            "PACKAGE" to packageName,
+            "CLASS_NAME" to className,
+            "MAIN" to mainClass,
+            "MAIN_NAME" to mainClassName
+        )
+
+        return project.applyTemplate(BUKKIT_LANG_CLASS_TEMPLATE, props)
+    }
+
+    fun applySettingsClass(
+        project: Project,
+        packageName: String,
         className: String
     ): String {
         val props = mapOf(
@@ -40,7 +76,7 @@ object BukkitTemplate : BaseTemplate() {
             "CLASS_NAME" to className
         )
 
-        return project.applyTemplate(BUKKIT_MAIN_CLASS_TEMPLATE, props)
+        return project.applyTemplate(BUKKIT_SETTINGS_CLASS_TEMPLATE, props)
     }
 
     fun applyPom(project: Project): String {
@@ -132,6 +168,18 @@ object BukkitTemplate : BaseTemplate() {
         }
 
         return project.applyTemplate(BUKKIT_PLUGIN_YML_TEMPLATE, props)
+    }
+
+    fun applyLangYml(
+        project: Project
+    ): String {
+        return project.applyTemplate(BUKKIT_LANG_YML_TEMPLATE)
+    }
+
+    fun applyConfigYml(
+        project: Project
+    ): String {
+        return project.applyTemplate(BUKKIT_CONFIG_YML_TEMPLATE)
     }
 
     fun <C> bukkitMain(type: BuildSystemType, config: C): MutableMap<String, String>
